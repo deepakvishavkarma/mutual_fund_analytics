@@ -1,14 +1,23 @@
+from pathlib import Path
+import os
 import pandas as pd
 from sqlalchemy import create_engine, text
 
+ROOT      = Path(__file__).resolve().parent.parent
+PROCESSED = ROOT / "data" / "processed"
 
+# Read credentials from environment variables — never hard-code
+user     = os.getenv("MYSQL_USER", "root")
+password = os.getenv("MYSQL_PASSWORD", "yourpassword")
+host     = os.getenv("MYSQL_HOST", "localhost")
+db       = os.getenv("MYSQL_DB", "mf_analytics")
 
-engine = create_engine("mysql+pymysql://deepak:Devendra%4012@localhost/mf_analytics")
+engine = create_engine(f"mysql+pymysql://{user}:{password}@{host}/{db}")
 
 # Load CSVs
-nav  = pd.read_csv("c:/Users/dell/mutual_fund_analytics/data/processed/nav_history_clean.csv")
-txn  = pd.read_csv("c:/Users/dell/mutual_fund_analytics/data/processed/transactions_clean.csv")
-perf = pd.read_csv("c:/Users/dell/mutual_fund_analytics/data/processed/performance_clean.csv")
+nav  = pd.read_csv(PROCESSED / "nav_history_clean.csv")
+txn  = pd.read_csv(PROCESSED / "transactions_clean.csv")
+perf = pd.read_csv(PROCESSED / "performance_clean.csv")
 
 # Push to MySQL
 print("Loading nav...")

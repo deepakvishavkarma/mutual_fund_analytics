@@ -1,14 +1,19 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("c:/users/dell/mutual_fund_analytics/data/processed/transactions_clean.csv")
+df = pd.read_csv(PROCESSED / "transactions_clean.csv")
 df["transaction_date"] = pd.to_datetime(df["transaction_date"])
 df["month_label"] = df["transaction_date"].dt.strftime("%b %Y")
 df["month_order"] = df["transaction_date"].dt.to_period("M")
 
 # Merge with fund master to get category
-master = pd.read_csv("c:/users/dell/mutual_fund_analytics/data/raw/01_fund_master.csv")[["amfi_code", "category"]]
+master = pd.read_csv(RAW / "01_fund_master.csv")[["amfi_code", "category"]]
 df = df.merge(master, on="amfi_code", how="left")
 
 pivot = df.groupby(["category", "month_label"])["amount_inr"].sum().reset_index()
@@ -30,5 +35,5 @@ plt.xlabel("Month")
 plt.ylabel("Fund Category")
 plt.xticks(rotation=45, ha="right", fontsize=7)
 plt.tight_layout()
-plt.savefig("c:/users/dell/mutual_fund_analytics/reports/charts/T4_category_heatmap.png", dpi=150)
+plt.savefig(CHARTS / "T4_category_heatmap.png", dpi=150)
 print("✅ T4 saved")

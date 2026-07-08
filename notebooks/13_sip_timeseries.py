@@ -1,7 +1,12 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import plotly.graph_objects as go
 
-df = pd.read_csv("c:/users/dell/mutual_fund_analytics/data/processed/transactions_clean.csv")
+df = pd.read_csv(PROCESSED / "transactions_clean.csv")
 df["transaction_date"] = pd.to_datetime(df["transaction_date"])
 df = df[df["transaction_type"] == "SIP"]
 
@@ -31,6 +36,6 @@ fig.update_layout(
     template="plotly_white", height=500
 )
 
-fig.write_html("c:/users/dell/mutual_fund_analytics/reports/charts/T3_sip_trend.html")
-fig.write_image("c:/users/dell/mutual_fund_analytics/reports/charts/T3_sip_trend.png", width=1400, height=500)
+fig.write_html(CHARTS / "T3_sip_trend.html")
+fig.write_image(CHARTS / "T3_sip_trend.png", width=1400, height=500)
 print("✅ T3 saved")

@@ -1,7 +1,12 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/nav_history_clean.csv")
+df = pd.read_csv(PROCESSED / "nav_history_clean.csv")
 df["date"] = pd.to_datetime(df["date"])
 df = df.sort_values(["amfi_code", "date"])
 
@@ -33,7 +38,7 @@ for code, group in df.groupby("amfi_code"):
 
 dd_df = pd.DataFrame(results).sort_values("max_drawdown")
 dd_df["dd_rank"] = range(1, len(dd_df) + 1)   # lower DD = better rank
-dd_df.to_csv("C:/users/dell/mutual_fund_analytics/data/processed/max_drawdown.csv", index=False)
+dd_df.to_csv(PROCESSED / "max_drawdown.csv", index=False)
 
 print("✅ Maximum Drawdown:")
 print(dd_df[["scheme_name", "max_drawdown", "drawdown_start", "drawdown_end"]].to_string(index=False))

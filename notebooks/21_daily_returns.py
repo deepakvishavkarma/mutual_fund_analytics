@@ -1,8 +1,13 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-df = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/nav_history_clean.csv")
+df = pd.read_csv(PROCESSED / "nav_history_clean.csv")
 df["date"] = pd.to_datetime(df["date"])
 df = df.sort_values(["amfi_code", "date"])
 
@@ -26,8 +31,8 @@ plt.xlabel("Daily Return")
 plt.ylabel("Frequency")
 plt.legend()
 plt.tight_layout()
-plt.savefig("C:/users/dell/mutual_fund_analytics/reports/charts/P0_daily_return_dist.png", dpi=150)
+plt.savefig(CHARTS / "P0_daily_return_dist.png", dpi=150)
 
 # Save for use by other scripts
-df.to_csv("C:/users/dell/mutual_fund_analytics/data/processed/daily_returns.csv", index=False)
+df.to_csv(PROCESSED / "daily_returns.csv", index=False)
 print("✅ Daily returns saved: C:/users/dell/mutual_fund_analytics/data/processed/daily_returns.csv")

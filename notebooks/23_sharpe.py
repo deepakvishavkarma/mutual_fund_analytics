@@ -1,7 +1,12 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/daily_returns.csv")
+df = pd.read_csv(PROCESSED / "daily_returns.csv")
 df["date"] = pd.to_datetime(df["date"])
 
 RF_ANNUAL = 0.065          # RBI repo rate proxy
@@ -27,7 +32,7 @@ for code, group in df.groupby("amfi_code"):
 
 sharpe_df = pd.DataFrame(results).sort_values("sharpe_ratio", ascending=False)
 sharpe_df["sharpe_rank"] = range(1, len(sharpe_df) + 1)
-sharpe_df.to_csv("C:/users/dell/mutual_fund_analytics/data/processed/sharpe_ratio.csv", index=False)
+sharpe_df.to_csv(PROCESSED / "sharpe_ratio.csv", index=False)
 
 print("✅ Sharpe Ratio Rankings:")
 print(sharpe_df[["scheme_name", "sharpe_ratio", "sharpe_rank"]].to_string(index=False))

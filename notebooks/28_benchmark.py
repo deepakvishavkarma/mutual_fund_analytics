@@ -1,9 +1,14 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
-df     = pd.read_csv("c:/users/dell/mutual_fund_analytics/data/processed/nav_history_clean.csv")
-scores = pd.read_csv("c:/users/dell/mutual_fund_analytics/data/processed/fund_scorecard.csv")
+df     = pd.read_csv(PROCESSED / "nav_history_clean.csv")
+scores = pd.read_csv(PROCESSED / "fund_scorecard.csv")
 df["date"] = pd.to_datetime(df["date"])
 
 # Debug: print columns to confirm
@@ -81,7 +86,7 @@ for i, code in enumerate(top5_codes):
 
 # Load Nifty 50 benchmark
 try:
-    nifty50 = pd.read_csv("c:/users/dell/mutual_fund_analytics/data/raw/10_benchmark_indices.csv")
+    nifty50 = pd.read_csv(RAW / "10_benchmark_indices.csv")
     nifty50["date"] = pd.to_datetime(nifty50["date"])
     nifty50 = nifty50[nifty50["date"] >= start].sort_values("date").copy()
     first   = nifty50["close_value"].iloc[0]
@@ -112,8 +117,8 @@ fig.update_layout(
     legend=dict(font=dict(size=10))
 )
 
-fig.write_html("c:/users/dell/mutual_fund_analytics/reports/charts/P7_benchmark.html")
-fig.write_image("c:/users/dell/mutual_fund_analytics/reports/charts/P7_benchmark.png", width=1400, height=550)
+fig.write_html(CHARTS / "P7_benchmark.html")
+fig.write_image(CHARTS / "P7_benchmark.png", width=1400, height=550)
 print("✅ Chart saved: c:/users/dell/mutual_fund_analytics/reports/charts/P7_benchmark.png")
 
 # Tracking Error calculation

@@ -1,7 +1,12 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/nav_history_clean.csv")
+df = pd.read_csv(PROCESSED / "nav_history_clean.csv")
 df["date"] = pd.to_datetime(df["date"])
 df = df.sort_values(["amfi_code", "date"])
 
@@ -36,7 +41,7 @@ for code, group in df.groupby("amfi_code"):
     })
 
 cagr_df = pd.DataFrame(results).sort_values("cagr_3yr", ascending=False)
-cagr_df.to_csv("C:/users/dell/mutual_fund_analytics/data/processed/cagr_table.csv", index=False)
+cagr_df.to_csv(PROCESSED / "cagr_table.csv", index=False)
 
 print("✅ CAGR Table:")
 print(cagr_df.to_string(index=False))

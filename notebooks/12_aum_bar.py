@@ -1,9 +1,14 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 
-df = pd.read_csv("c:/users/dell/mutual_fund_analytics/data/raw/03_aum_by_fund_house.csv")
+df = pd.read_csv(RAW / "03_aum_by_fund_house.csv")
 df["date"] = pd.to_datetime(df["date"])
 df["year"] = df["date"].dt.year
 df = df[df["year"].between(2022, 2025)]
@@ -28,5 +33,5 @@ plt.xlabel("Year")
 plt.ylabel("AUM")
 plt.legend(bbox_to_anchor=(1.01, 1), loc="upper left", fontsize=8)
 plt.tight_layout()
-plt.savefig("c:/users/dell/mutual_fund_analytics/reports/charts/T2_aum_bar.png", dpi=150)
+plt.savefig(CHARTS / "T2_aum_bar.png", dpi=150)
 print("✅ T2 saved")

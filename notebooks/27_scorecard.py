@@ -1,15 +1,20 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import numpy as np
 
 # Load all metric files
-cagr    = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/cagr_table.csv")[["amfi_code", "scheme_name", "cagr_3yr"]]
-sharpe  = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/sharpe_ratio.csv")[["amfi_code", "sharpe_ratio"]]
-alpha   = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/alpha_beta.csv")[["amfi_code", "alpha", "beta"]]
-dd      = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/max_drawdown.csv")[["amfi_code", "max_drawdown"]]
+cagr    = pd.read_csv(PROCESSED / "cagr_table.csv")[["amfi_code", "scheme_name", "cagr_3yr"]]
+sharpe  = pd.read_csv(PROCESSED / "sharpe_ratio.csv")[["amfi_code", "sharpe_ratio"]]
+alpha   = pd.read_csv(PROCESSED / "alpha_beta.csv")[["amfi_code", "alpha", "beta"]]
+dd      = pd.read_csv(PROCESSED / "max_drawdown.csv")[["amfi_code", "max_drawdown"]]
 
 # Try to get expense ratio from performance data
 try:
-    perf = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/performance_clean.csv")[["amfi_code", "expense_ratio"]]
+    perf = pd.read_csv(PROCESSED / "performance_clean.csv")[["amfi_code", "expense_ratio"]]
 except:
     perf = pd.DataFrame({"amfi_code": cagr["amfi_code"], "expense_ratio": 1.5})
 
@@ -60,7 +65,7 @@ sc["final_rank"] = range(1, len(sc) + 1)
 
 cols = ["final_rank", "amfi_code", "scheme_name", "composite_score",
         "cagr_3yr", "sharpe_ratio", "alpha", "expense_ratio", "max_drawdown"]
-sc[cols].to_csv("C:/users/dell/mutual_fund_analytics/data/processed/fund_scorecard.csv", index=False)
+sc[cols].to_csv(PROCESSED / "fund_scorecard.csv", index=False)
 
 print("✅ Fund Scorecard (Top 10):")
 print(sc[cols].head(10).to_string(index=False))

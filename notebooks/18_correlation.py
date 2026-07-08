@@ -1,8 +1,13 @@
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent.parent
+RAW=ROOT/"data"/"raw"
+PROCESSED=ROOT/"data"/"processed"
+CHARTS=ROOT/"reports"/"charts"
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("C:/users/dell/mutual_fund_analytics/data/processed/nav_history_clean.csv")
+df = pd.read_csv(PROCESSED / "nav_history_clean.csv")
 df["date"] = pd.to_datetime(df["date"])
 
 # Pick 10 funds
@@ -33,5 +38,5 @@ plt.title("Pairwise Correlation of Daily Returns — Top 10 Funds")
 plt.xticks(rotation=45, ha="right", fontsize=8)
 plt.yticks(fontsize=8)
 plt.tight_layout()
-plt.savefig("C:/users/dell/mutual_fund_analytics/reports/charts/T8_correlation.png", dpi=150)
+plt.savefig(CHARTS / "T8_correlation.png", dpi=150)
 print("✅ T8 saved")

@@ -1,8 +1,14 @@
+from pathlib import Path
+
+ROOT      = Path(__file__).resolve().parent.parent
+RAW       = ROOT / "data" / "raw"
+PROCESSED = ROOT / "data" / "processed"
+
 import pandas as pd
 import os
 import time
 
-df = pd.read_csv("c:/Users/Dell/mutual_fund_analytics/data/raw/02_nav_history.csv")
+df = pd.read_csv(RAW / "02_nav_history.csv")
 print("Original shape:", df.shape)
 
 # Parse dates
@@ -23,5 +29,5 @@ invalid = df[df["nav"] <= 0]
 print(f" Invalid NAV rows removed: {len(invalid)}")
 df = df[df["nav"] > 0]
 
-df.to_csv("c:/Users/Dell/mutual_fund_analytics/data/processed/nav_history_clean.csv", index=False)
+df.to_csv(PROCESSED / "nav_history_clean.csv", index=False)
 print("Saved.Final shape:", df.shape)
